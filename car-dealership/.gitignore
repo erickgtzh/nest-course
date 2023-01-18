@@ -1,9 +1,6 @@
 # compiled output
 /dist
-node_modules
-pokedex/node_modules
-car-dealership/node_modules
-pokedex/mongo/*
+/node_modules
 
 # Logs
 logs
