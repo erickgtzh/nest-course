@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 const pokemon_entity_1 = require("./entities/pokemon.entity");
+const common_2 = require("@nestjs/common");
 let PokemonService = class PokemonService {
     constructor(pokemonModel) {
         this.pokemonModel = pokemonModel;
@@ -28,26 +29,55 @@ let PokemonService = class PokemonService {
             return pokemon;
         }
         catch (error) {
-            if (error.code === 11000) {
-                throw new common_1.BadRequestException('Pokemon already exists in db');
-            }
-            else {
-                console.log(error);
-                throw new common_1.InternalServerErrorException(`Can't create Pokemon - Check server logs`);
-            }
+            this.handleExceptions(error);
         }
     }
     findAll() {
         return `This action returns all pokemon`;
     }
-    findOne(id) {
-        return `This action returns a #${id} pokemon`;
+    async findOne(term) {
+        let pokemon;
+        if (!isNaN(+term)) {
+            pokemon = await this.pokemonModel.findOne({ no: term });
+        }
+        if (!pokemon && (0, mongoose_2.isValidObjectId)(term)) {
+            pokemon = await this.pokemonModel.findById(term);
+        }
+        if (!pokemon) {
+            pokemon = await this.pokemonModel.findOne({
+                name: term.toLowerCase().trim(),
+            });
+        }
+        if (!pokemon)
+            throw new common_2.NotFoundException(`Pokemon with id, name or no "${term} not found`);
+        return pokemon;
     }
-    update(id, updatePokemonDto) {
-        return `This action updates a #${id} pokemon`;
+    async update(term, updatePokemonDto) {
+        const pokemon = await this.findOne(term);
+        if (updatePokemonDto.name)
+            updatePokemonDto.name = updatePokemonDto.name.toLowerCase();
+        try {
+            await pokemon.updateOne(updatePokemonDto);
+            return Object.assign(Object.assign({}, pokemon.toJSON()), updatePokemonDto);
+        }
+        catch (error) {
+            this.handleExceptions(error);
+        }
     }
-    remove(id) {
-        return `This action removes a #${id} pokemon`;
+    handleExceptions(error) {
+        if (error.code === 11000) {
+            throw new common_1.BadRequestException(`Pokemon already exists in db ${JSON.stringify(error.keyValue)}`);
+        }
+        else {
+            console.log(error);
+            throw new common_1.InternalServerErrorException(`Can't create Pokemon - Check server logs`);
+        }
+    }
+    async remove(id) {
+        const { deletedCount } = await this.pokemonModel.deleteOne({ _id: id });
+        if (!deletedCount)
+            throw new common_1.BadRequestException(`Pokemon with id ${id} not found`);
+        return;
     }
 };
 PokemonService = __decorate([

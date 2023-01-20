@@ -9,7 +9,11 @@ export declare class PokemonService {
         _id: import("mongoose").Types.ObjectId;
     }>;
     findAll(): string;
-    findOne(id: number): string;
-    update(id: number, updatePokemonDto: UpdatePokemonDto): string;
-    remove(id: number): string;
+    findOne(term: string): Promise<Pokemon>;
+    update(term: string, updatePokemonDto: UpdatePokemonDto): Promise<{
+        no?: number;
+        name?: string;
+    }>;
+    private handleExceptions;
+    remove(id: string): Promise<void>;
 }
