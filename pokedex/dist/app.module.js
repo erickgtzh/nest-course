@@ -13,6 +13,7 @@ const serve_static_1 = require("@nestjs/serve-static");
 const path_1 = require("path");
 const pokemon_module_1 = require("./pokemon/pokemon.module");
 const common_module_1 = require("./common/common.module");
+const seed_module_1 = require("./seed/seed.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -24,6 +25,7 @@ AppModule = __decorate([
             pokemon_module_1.PokemonModule,
             mongoose_1.MongooseModule.forRoot('mongodb://localhost:27017/nest-pokemon'),
             common_module_1.CommonModule,
+            seed_module_1.SeedModule,
         ],
     })
 ], AppModule);
