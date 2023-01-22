@@ -18,9 +18,12 @@ const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 const pokemon_entity_1 = require("./entities/pokemon.entity");
 const common_2 = require("@nestjs/common");
+const config_1 = require("@nestjs/config");
 let PokemonService = class PokemonService {
-    constructor(pokemonModel) {
+    constructor(pokemonModel, configService) {
         this.pokemonModel = pokemonModel;
+        this.configService = configService;
+        this.defaultLimit = configService.get('defaultLimit');
     }
     async create(createPokemonDto) {
         createPokemonDto.name = createPokemonDto.name.toLocaleLowerCase();
@@ -32,8 +35,14 @@ let PokemonService = class PokemonService {
             this.handleExceptions(error);
         }
     }
-    findAll() {
-        return `This action returns all pokemon`;
+    findAll(paginationDto) {
+        const { limit = this.defaultLimit, offset = 0 } = paginationDto;
+        return this.pokemonModel
+            .find()
+            .limit(limit)
+            .skip(offset)
+            .sort({ no: 1 })
+            .select('-__v');
     }
     async findOne(term) {
         let pokemon;
@@ -83,7 +92,8 @@ let PokemonService = class PokemonService {
 PokemonService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, mongoose_1.InjectModel)(pokemon_entity_1.Pokemon.name)),
-    __metadata("design:paramtypes", [mongoose_2.Model])
+    __metadata("design:paramtypes", [mongoose_2.Model,
+        config_1.ConfigService])
 ], PokemonService);
 exports.PokemonService = PokemonService;
 //# sourceMappingURL=pokemon.service.js.map

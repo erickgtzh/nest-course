@@ -26,13 +26,21 @@ import { Model } from 'mongoose';
 import { CreatePokemonDto } from './dto/create-pokemon.dto';
 import { UpdatePokemonDto } from './dto/update-pokemon.dto';
 import { Pokemon } from './entities/pokemon.entity';
+import { PaginationDto } from '../common/dto/pagination.dto';
+import { ConfigService } from '@nestjs/config';
 export declare class PokemonService {
     private readonly pokemonModel;
-    constructor(pokemonModel: Model<Pokemon>);
+    private readonly configService;
+    private defaultLimit;
+    constructor(pokemonModel: Model<Pokemon>, configService: ConfigService);
     create(createPokemonDto: CreatePokemonDto): Promise<Pokemon & {
         _id: import("mongoose").Types.ObjectId;
     }>;
-    findAll(): string;
+    findAll(paginationDto: PaginationDto): import("mongoose").Query<(Pokemon & {
+        _id: import("mongoose").Types.ObjectId;
+    })[], Pokemon & {
+        _id: import("mongoose").Types.ObjectId;
+    }, {}, Pokemon>;
     findOne(term: string): Promise<Pokemon>;
     update(term: string, updatePokemonDto: UpdatePokemonDto): Promise<{
         no?: number;

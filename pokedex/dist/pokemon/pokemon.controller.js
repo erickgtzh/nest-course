@@ -18,6 +18,7 @@ const pokemon_service_1 = require("./pokemon.service");
 const create_pokemon_dto_1 = require("./dto/create-pokemon.dto");
 const update_pokemon_dto_1 = require("./dto/update-pokemon.dto");
 const parse_mongo_id_pipe_1 = require("../common/pipes/parse-mongo-id.pipe");
+const pagination_dto_1 = require("../common/dto/pagination.dto");
 let PokemonController = class PokemonController {
     constructor(pokemonService) {
         this.pokemonService = pokemonService;
@@ -25,8 +26,8 @@ let PokemonController = class PokemonController {
     create(createPokemonDto) {
         return this.pokemonService.create(createPokemonDto);
     }
-    findAll() {
-        return this.pokemonService.findAll();
+    findAll(paginationDto) {
+        return this.pokemonService.findAll(paginationDto);
     }
     findOne(term) {
         return this.pokemonService.findOne(term);
@@ -48,8 +49,9 @@ __decorate([
 ], PokemonController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
+    __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [pagination_dto_1.PaginationDto]),
     __metadata("design:returntype", void 0)
 ], PokemonController.prototype, "findAll", null);
 __decorate([

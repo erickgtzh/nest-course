@@ -14,16 +14,23 @@ const path_1 = require("path");
 const pokemon_module_1 = require("./pokemon/pokemon.module");
 const common_module_1 = require("./common/common.module");
 const seed_module_1 = require("./seed/seed.module");
+const config_1 = require("@nestjs/config");
+const app_config_1 = require("./config/app.config");
+const joi_validation_1 = require("./config/joi.validation");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
+            config_1.ConfigModule.forRoot({
+                load: [app_config_1.EnvConfiguration],
+                validationSchema: joi_validation_1.JoiValidationSchema,
+            }),
             serve_static_1.ServeStaticModule.forRoot({
                 rootPath: (0, path_1.join)(__dirname, '..', 'public'),
             }),
+            mongoose_1.MongooseModule.forRoot(process.env.MONGODB),
             pokemon_module_1.PokemonModule,
-            mongoose_1.MongooseModule.forRoot('mongodb://localhost:27017/nest-pokemon'),
             common_module_1.CommonModule,
             seed_module_1.SeedModule,
         ],

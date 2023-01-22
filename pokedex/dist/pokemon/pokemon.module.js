@@ -12,13 +12,16 @@ const pokemon_service_1 = require("./pokemon.service");
 const pokemon_controller_1 = require("./pokemon.controller");
 const mongoose_1 = require("@nestjs/mongoose");
 const pokemon_entity_1 = require("./entities/pokemon.entity");
+const config_1 = require("@nestjs/config");
 let PokemonModule = class PokemonModule {
 };
 PokemonModule = __decorate([
     (0, common_1.Module)({
         controllers: [pokemon_controller_1.PokemonController],
         providers: [pokemon_service_1.PokemonService],
+        exports: [mongoose_1.MongooseModule],
         imports: [
+            config_1.ConfigModule,
             mongoose_1.MongooseModule.forFeature([
                 {
                     name: pokemon_entity_1.Pokemon.name,

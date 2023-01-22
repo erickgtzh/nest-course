@@ -10,12 +10,15 @@ exports.SeedModule = void 0;
 const common_1 = require("@nestjs/common");
 const seed_service_1 = require("./seed.service");
 const seed_controller_1 = require("./seed.controller");
+const pokemon_module_1 = require("../pokemon/pokemon.module");
+const common_module_1 = require("../common/common.module");
 let SeedModule = class SeedModule {
 };
 SeedModule = __decorate([
     (0, common_1.Module)({
         controllers: [seed_controller_1.SeedController],
-        providers: [seed_service_1.SeedService]
+        providers: [seed_service_1.SeedService],
+        imports: [pokemon_module_1.PokemonModule, common_module_1.CommonModule],
     })
 ], SeedModule);
 exports.SeedModule = SeedModule;
