@@ -2,13 +2,8 @@
 /dist
 node_modules
 pokedex/node_modules
-pokedex/mongo
 car-dealership/node_modules
-car-dealership/.env
-teslo-shop/node_modules
-teslo-shop/postgres
-teslo-shop/dist
-teslo-shop/.env
+pokedex/mongo/*
 
 # Logs
 logs
@@ -42,7 +37,4 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 .DS_Store
-
-# env files
 pokedex/.env.prod
-teslo-shop/.env.prod
